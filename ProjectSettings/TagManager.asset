@@ -7,6 +7,9 @@ TagManager:
   - Bogeyman
   - Rock_fire
   - Rock_water
+  - Gun
+  - LeftHandWeapon
+  - RightHandWeapon
   layers:
   - Default
   - TransparentFX
