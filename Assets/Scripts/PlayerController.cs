@@ -6,23 +6,28 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.XR;
 using System;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] CharacterController characterController;
     [SerializeField] TextMeshProUGUI textSelectHand;
     [SerializeField] float speed = 10f;
+    [SerializeField] GameObject waterBall;
+    [SerializeField] GameObject fireBall;
 
     bool playerInTrigger = false;
     string triggerTag = "";
 
-    Hand leftHand = new Hand();
-    Hand rightHand = new Hand();
     public class Hand
     {
         public bool isBusy = false;
         public GameObject weapon;
+        public string weaponName;
     }
+    Hand leftHand = new Hand();
+    Hand rightHand = new Hand();
+
 
     private void Start()
     {
@@ -39,6 +44,15 @@ public class PlayerController : MonoBehaviour
             characterController.Move(direction * speed * Time.deltaTime);
         }
         SelectingWeapon();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            UsingWeapon(ref leftHand);
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            UsingWeapon(ref rightHand);
+        }
     }
 
     private void OnTriggerEnter(Collider weapon)
@@ -56,6 +70,10 @@ public class PlayerController : MonoBehaviour
         playerInTrigger = false;
         triggerTag = "";
     }
+
+    /// <summary>
+    /// Tracks key pressing when selecting or deselecting a hand
+    /// </summary>
     void SelectingWeapon()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -68,6 +86,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initiates Hand object or destroyed it
+    /// </summary>
+    /// <param name="hand">Left or right hand object</param>
+    /// <param name="weaponPosition">Position of weapon on Player body</param>
     void UsingHand(ref Hand hand, Vector3 weaponPosition)
     {
         if (hand.isBusy)
@@ -81,9 +104,27 @@ public class PlayerController : MonoBehaviour
             hand.weapon.GetComponent<Collider>().enabled = false;
             hand.weapon.transform.localPosition = weaponPosition;
             hand.weapon.transform.localScale *= 0.5f;
+            hand.weaponName = triggerTag;
             hand.isBusy = true;
         }
-        
+
+    }
+
+    void UsingWeapon(ref Hand hand)
+    {
+        switch (hand.weaponName)
+        {
+            case "Rock_water":
+                {
+                    Instantiate(waterBall, hand.weapon.transform.position, hand.weapon.transform.rotation);
+
+                }; break;
+            case "Rock_fire":
+                {
+                    Instantiate(fireBall, hand.weapon.transform.position, hand.weapon.transform.rotation);
+
+                }; break;
+        }
     }
 }
 

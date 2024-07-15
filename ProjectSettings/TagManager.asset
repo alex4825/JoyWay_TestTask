@@ -10,6 +10,7 @@ TagManager:
   - Gun
   - LeftHandWeapon
   - RightHandWeapon
+  - Ground
   layers:
   - Default
   - TransparentFX
