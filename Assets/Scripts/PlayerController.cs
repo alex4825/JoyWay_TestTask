@@ -4,6 +4,8 @@ using Debug = UnityEngine.Debug;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.XR;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,30 +13,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] TextMeshProUGUI textSelectHand;
     [SerializeField] float speed = 10f;
 
-    GameObject leftHandWeapon;
-    GameObject rightHandWeapon;
-
-    //[SerializeField] GameObject gun;
-    //[SerializeField] GameObject rock_water;
-    //[SerializeField] GameObject rock_fire;
-
-    bool isLeftHandBusy = false;
-    bool isRightHandBusy = false;
     bool playerInTrigger = false;
     string triggerTag = "";
 
-    /*bool haveGun = false;
-    bool haveRockWater = false;
-    bool haveRockFire = false;
-    bool isLeftHandFree = true;
-    bool isRightHandFree = true;
-    string leftHandWeapon = "Empty weapon";
-    string rightHandWeapon = "Empty weapon";*/
+    Hand leftHand = new Hand();
+    Hand rightHand = new Hand();
+    public class Hand
+    {
+        public bool isBusy = false;
+        public GameObject weapon;
+    }
+
     private void Start()
     {
 
     }
-    // Update is called once per frame
     void Update()
     {
         float vertical = Input.GetAxis("Vertical");
@@ -46,11 +39,6 @@ public class PlayerController : MonoBehaviour
             characterController.Move(direction * speed * Time.deltaTime);
         }
         SelectingWeapon();
-        /*if (playerInTrigger)
-        {
-            SelectingWeapon();
-        }*/
-
     }
 
     private void OnTriggerEnter(Collider weapon)
@@ -72,80 +60,31 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (isLeftHandBusy)
-            {
-                Destroy(leftHandWeapon);
-                isLeftHandBusy = false;
-            }
-            else if (playerInTrigger)
-            {
-                leftHandWeapon = Instantiate(GameObject.FindGameObjectWithTag(triggerTag), transform, false);
-                leftHandWeapon.GetComponent<Collider>().enabled = false;
-                leftHandWeapon.transform.localPosition = new Vector3(-1.35f, -1f, 0f);
-                leftHandWeapon.transform.localScale *= 0.5f;
-                isLeftHandBusy = true;
-            }
-
-            /*switch (triggerTag)
-            {
-                case "Gun": leftHandWeapon = Instantiate(gun); break;
-                case "Rock_water": leftHandWeapon = Instantiate(rock_water); break;
-                case "Rock_fire": leftHandWeapon = Instantiate(rock_fire); break;
-            }
-            leftHandWeapon = Instantiate(GameObject.FindGameObjectWithTag(weaponTag));
-            SpawnWeapon(leftHandWeapon);*/
+            UsingHand(ref leftHand, new Vector3(-1.35f, -1f, 0f));
         }
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (isRightHandBusy)
-            {
-                Destroy(rightHandWeapon);
-                isRightHandBusy = false;
-            }
-            else if (playerInTrigger)
-            {
-                rightHandWeapon = Instantiate(GameObject.FindGameObjectWithTag(triggerTag), transform, false);
-                rightHandWeapon.GetComponent<Collider>().enabled = false;
-                rightHandWeapon.transform.localPosition = new Vector3(1.35f, -1f, 0f);
-                rightHandWeapon.transform.localScale *= 0.5f;
-                isRightHandBusy = true;
-            }
+            UsingHand(ref rightHand, new Vector3(1.35f, -1f, 0f));
         }
     }
-    /*if (Input.GetKeyDown(KeyCode.Q))
+
+    void UsingHand(ref Hand hand, Vector3 weaponPosition)
     {
-        if (isLeftHandFree)
+        if (hand.isBusy)
         {
-            leftHandWeapon = weapon;
-            isLeftHandFree = false;
+            Destroy(hand.weapon);
+            hand.isBusy = false;
         }
-        else
+        else if (playerInTrigger)
         {
-            leftHandWeapon = "Empty weapon";
-            isLeftHandFree = true;
+            hand.weapon = Instantiate(GameObject.FindGameObjectWithTag(triggerTag), transform, false);
+            hand.weapon.GetComponent<Collider>().enabled = false;
+            hand.weapon.transform.localPosition = weaponPosition;
+            hand.weapon.transform.localScale *= 0.5f;
+            hand.isBusy = true;
         }
-        Debug.Log("In left hand " + leftHandWeapon);
+        
     }
-    if (Input.GetKeyDown(KeyCode.E))
-    {
-        if (isRightHandFree)
-        {
-            rightHandWeapon = weapon;
-            isRightHandFree = false;
-        }
-        else
-        {
-            rightHandWeapon = "Empty weapon";
-            isRightHandFree = true;
-        }
-        Debug.Log("In right hand " + rightHandWeapon);
-    }*/
-
-
-    //void SpawnWeapon(GameObject weapon)
-    //{
-    //    //spawn weapon like a child of the Player
-    //    Instantiate(weapon, gameObject.transform);
-    //}
-
 }
+
+
