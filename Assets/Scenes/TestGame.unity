@@ -176,7 +176,7 @@ MonoBehaviour:
   textSelectHand: {fileID: 1230797294}
   speed: 10
   waterBall: {fileID: 3644166881784047547, guid: b28318539c60d0c4f8b961c9df413a19, type: 3}
-  fireBall: {fileID: 4405823604538665424, guid: f45b6c7f1f8f80943adac0a11a4673a0, type: 3}
+  fireBall: {fileID: 8971794059223245932, guid: 6a9234caa4d135b4692510093bbdb8cf, type: 3}
 --- !u!143 &113503280
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1283,8 +1283,8 @@ GameObject:
   - component: {fileID: 1439548700}
   - component: {fileID: 1439548699}
   m_Layer: 0
-  m_Name: Floor
-  m_TagString: Untagged
+  m_Name: Ground
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2177,7 +2177,7 @@ GameObject:
   - component: {fileID: 381580148}
   m_Layer: 0
   m_Name: Bogeyman
-  m_TagString: Untagged
+  m_TagString: Bogeyman
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
